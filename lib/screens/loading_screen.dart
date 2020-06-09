@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import '../services/location.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -10,19 +10,23 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
+    //retrieve user geolocation upon app load
     getLocation();
   }
 
   void getLocation() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    //6.8.2020 Geolocation BUG - Geolocation only registers on High or Best
-    print(position);
+    /*EXCEPTION HANDLING if unable to retrieve user location
+     - logic found in location.dart*/
+    Location location = Location();
+//    initialize location object - import from location.dart file
+    await location.getCurrentLocation();
+    //wait for location to be retrieved prior to printing to console
+    print(location.latitude);
+    print(location.longitude);
   }
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     super.deactivate();
   }
 
