@@ -1,5 +1,8 @@
-import 'package:clima/services/networking.dart';
+//import 'dart:js';
 import 'package:flutter/material.dart';
+import 'location_screen.dart';
+import 'package:clima/services/networking.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../services/location.dart';
 
 const apiKey = '0eb64c32e0822ab14c9d6eb851b8f8b9';
@@ -50,17 +53,22 @@ class _LoadingScreenState extends State<LoadingScreen> {
     NetworkCall networkCall = NetworkCall(
         'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
 
-    var weatherData = await networkCall.getData();
+//    var weatherData = await networkCall.getData();
+
+    Navigator.push(this.context, MaterialPageRoute(builder: (context) {
+      return LocationScreen();
+    }));
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
+    return Scaffold(
+      body: Center(
+        child: SpinKitFoldingCube(
+          color: Colors.white,
+          size: 75.0,
+        ),
+      ),
+    );
   }
-}
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold();
 }
