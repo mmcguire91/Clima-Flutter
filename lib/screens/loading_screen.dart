@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import '../services/location.dart';
 import 'package:http/http.dart' as http;
 //requires user to specify package.DataType
-import 'package:convert/convert.dart';
+import 'dart:convert';
 //imports jsonDecode
+
+const apiKey = '0eb64c32e0822ab14c9d6eb851b8f8b9';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -12,6 +14,9 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  double latitude;
+  double longitude;
+
   @override
   void initState() {
     super.initState();
@@ -26,14 +31,17 @@ class _LoadingScreenState extends State<LoadingScreen> {
 //    initialize location object - import from location.dart file
     await location.getCurrentLocation();
     //wait for location to be retrieved prior to printing to console
-    print(location.latitude);
-    print(location.longitude);
+    latitude = location.latitude;
+    longitude = location.longitude;
+    /*ensure we can retrieve current location of user --> location.getCurrentLocation
+    prior to attempting to retrieve the retrieve the weather data from the API call*/
+    getData();
   }
 
   //API Call
   void getData() async {
     http.Response response = await http.get(
-        'https://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=439d4b804bc8187953eb36d2a8c26a02');
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
 
     /*http 200 return request = successful call
      If there was a successful API call
@@ -46,6 +54,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
       var longitude = jsonDecode(data)['coord']['lon'];
       //retrieve longitude data from API call in JSON format and store in var longitude
       print(longitude);
+
+      var latitude = jsonDecode(data)['coord']['lat'];
+      //retrieve latitude data from API call in JSON format and store in var longitude
+      print(latitude);
 
       var decodedData = jsonDecode(data);
       //required for us to specify data types
@@ -69,7 +81,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getData();
     return Scaffold();
   }
 }
