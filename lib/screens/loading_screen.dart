@@ -53,7 +53,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     NetworkCall networkCall = NetworkCall(
         'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
 
-//    var weatherData = await networkCall.getData();
+    var weatherData = await networkCall.getData();
 
     Navigator.push(this.context, MaterialPageRoute(builder: (context) {
       return LocationScreen();
