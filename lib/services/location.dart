@@ -7,6 +7,7 @@ class Location {
 
   Future<void> getCurrentLocation() async {
     //exception handling if unable to retrieve user location
+    //import of geolocator widget to retrieve and use user location
     try {
       Position position = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
