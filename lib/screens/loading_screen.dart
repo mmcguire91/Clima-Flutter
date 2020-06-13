@@ -1,4 +1,3 @@
-//import 'dart:js';
 import 'package:flutter/material.dart';
 import 'location_screen.dart';
 import 'package:clima/services/networking.dart';
@@ -13,9 +12,6 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  double latitude;
-  double longitude;
-
   @override
   void initState() {
     super.initState();
@@ -45,18 +41,20 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Location location = Location();
 //    initialize location object - import from location.dart file
     await location.getCurrentLocation();
-    //wait for location to be retrieved prior to printing to console
-    latitude = location.latitude;
-    longitude = location.longitude;
-    /*ensure we can retrieve current location of user --> location.getCurrentLocation
+    /*wait for location to be retrieved prior to printing to console
+    ensure we can retrieve current location of user --> location.getCurrentLocation
     prior to attempting to retrieve the retrieve the weather data from the API call*/
     NetworkCall networkCall = NetworkCall(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
+        'https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=imperial');
 
     var weatherData = await networkCall.getData();
+    //store data from API call in variable weatherData
 
     Navigator.push(this.context, MaterialPageRoute(builder: (context) {
-      return LocationScreen();
+      return LocationScreen(
+        locationWeather: weatherData,
+        //pass over weatherData to next screen retrieved from API call
+      );
     }));
   }
 
