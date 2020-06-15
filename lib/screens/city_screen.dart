@@ -39,7 +39,16 @@ class _CityScreenState extends State<CityScreen> {
                   ),
                 ),
               ),
-              Container(padding: EdgeInsets.all(20.0), child: kTextField),
+              Container(
+                padding: EdgeInsets.all(20.0),
+                child: TextField(
+                  style: TextStyle(color: Colors.black),
+                  decoration: kTextFieldDecoration,
+                  onChanged: (value) {
+                    print(value);
+                  },
+                ),
+              ),
               FlatButton(
                 onPressed: () {},
                 child: Text(
