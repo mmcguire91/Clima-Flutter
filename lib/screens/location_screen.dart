@@ -29,6 +29,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void updateUI(dynamic weatherData) {
     setState(() {
+      //exception handling if response location services is not accessible
       if (weatherData == null) {
         temperature = 0;
         weatherIcon = 'Error';
@@ -81,13 +82,19 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      var typedName = await Navigator.push(
                         this.context,
                         MaterialPageRoute(
                           builder: (context) => CityScreen(),
                         ),
                       );
+                      //retrieve data based on typed name in text field in city_screen
+                      if (typedName != null) {
+                        var cityWeatherData =
+                            await weather.getCityWeather(typedName);
+                        updateUI(cityWeatherData);
+                      }
                     },
                     child: Icon(
                       Icons.location_city,

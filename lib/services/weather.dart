@@ -5,10 +5,34 @@ const apiKey = '0eb64c32e0822ab14c9d6eb851b8f8b9';
 const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';
 
 class WeatherModel {
-  Future<dynamic> getLocationWeather() async {
-    /*WHAT'S HAPPENING HERE?
+  //retrieve data on city based on input from text field in city_screen
+  Future<dynamic> getCityWeather(String cityName) async {
+    NetworkCall networkCallCity = NetworkCall(
+        '$openWeatherMapURL?q=$cityName&appid=$apiKey&units=imperial');
 
-    * We're using the GEOLOCATION package
+    var cityWeatherData = await networkCallCity.getData();
+
+    return cityWeatherData;
+  }
+
+  //retrieve data on user current location
+  Future<dynamic> getLocationWeather() async {
+    Location location = Location();
+
+    await location.getCurrentLocation();
+
+    NetworkCall networkCall = NetworkCall(
+        '$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=imperial');
+
+    var weatherData = await networkCall.getData();
+    //store data from API call in variable weatherData
+
+    return weatherData;
+  }
+
+  /*WHAT'S HAPPENING HERE?
+
+    * We're using the GEOLOCATION package. Initializing location object which is imported from location.dart file
     Location location = Location();
 
     * Awaiting the response so we know which data to display relevant to the user's current location
@@ -20,24 +44,13 @@ class WeatherModel {
 
     * Use call the NetworkCall data type property and store that in a local variable 'networkCall' and call the local longitude and latitude variables in the URL
     NetworkCall networkCall = NetworkCall('https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
- */
 
-    /*EXCEPTION HANDLING if unable to retrieve user location
-     - logic found in location.dart*/
-    Location location = Location();
-//    initialize location object - import from location.dart file
-    await location.getCurrentLocation();
-    /*wait for location to be retrieved prior to printing to console
-    ensure we can retrieve current location of user --> location.getCurrentLocation
-    prior to attempting to retrieve the retrieve the weather data from the API call*/
-    NetworkCall networkCall = NetworkCall(
-        '$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=imperial');
-
+    * Store data from API call in variable weatherData
     var weatherData = await networkCall.getData();
-    //store data from API call in variable weatherData
 
-    return weatherData;
-  }
+    * Return the value
+    return weatherData();
+ */
 
   String getWeatherIcon(int condition) {
     if (condition < 300) {
